@@ -2,17 +2,14 @@ require("dotenv").config();
 var keys= require("./keys.js");
 var Twitter = require('twitter');
 var Spotify = require('node-spotify-api');
-var omdb = require('omdb');
+var request = require("request");
+
 
 var argOne = process.argv[2];
 var argTwo = process.argv[3];
-var omdb = require('omdb');
-
-var omdbApiKey = "e443c6de";
-var client = new Twitter(keys.twitter);
-var spotify = new Spotify(keys.spotify);
 
 if(argOne === "my-tweets"){
+  var client = new Twitter(keys.twitter);
   var userName = { screen_name: "Tayconnection",
                 count: 2 };
 
@@ -23,21 +20,22 @@ if(argOne === "my-tweets"){
 
 
   }else if(argOne === "spotify-this-song"){
-    spotify.request('https://api.spotify.com/v1/tracks/7yCPwWs66K8Ba5lFuU2bcx')
-    .then(function(data) {
-      console.log(data);
-    })
-    .catch(function(err) {
-      console.error('Error occurred: ' + err); 
-    });
-
-    // spotify.search({ type: 'track', query: 'All the Small Things' }, function(err, data) {
-    //   if (err) {
-    //     return console.log('Error occurred: ' + err);
-    //   }
-    //  console.log(data)
-    // //console.log(JSON.stringify(data)); 
+    var spotify = new Spotify(keys.spotify);
+    // spotify.request('https://api.spotify.com/v1/' + argTwo + '/7yCPwWs66K8Ba5lFuU2bcx')
+    // .then(function(data) {
+    //   console.log(data);
+    // })
+    // .catch(function(err) {
+    //   console.error('Error occurred: ' + err); 
     // });
+
+    spotify.search({ type: 'track', query: argTwo }, function(err, data) {
+      if (err) {
+        return console.log('Error occurred: ' + err);
+      }
+     console.log(data)
+    //console.log(JSON.stringify(data)); 
+    });
   }else if(argOne === "movie-this"){
     
     var params = {
@@ -56,12 +54,6 @@ if(argOne === "my-tweets"){
     movies.forEach(function(movie) {
         console.log('%s (%d)', movie.title, movie.year);
     });
- 
-    // Saw (2004) 
-    // Saw II (2005) 
-    // Saw III (2006) 
-    // Saw IV (2007) 
-    // ... 
     });
   }
 
