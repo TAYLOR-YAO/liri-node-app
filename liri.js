@@ -10,52 +10,42 @@ var argTwo = process.argv[3];
 
 if(argOne === "my-tweets"){
   var client = new Twitter(keys.twitter);
-  var userName = { screen_name: "Tayconnection",
-                count: 2 };
 
-  client.get('statuses/user_timeline', userName, function(error, tweets, response) {
+  client.get('statuses/user_timeline', { screen_name: "Tayconnection"}, function(error, tweets, response) {
     if(error) return console.log(error);
-    console.log(JSON.stringify(tweets, null, 2));
-  });
-
-
-  }else if(argOne === "spotify-this-song"){
-    var spotify = new Spotify(keys.spotify);
-    // spotify.request('https://api.spotify.com/v1/' + argTwo + '/7yCPwWs66K8Ba5lFuU2bcx')
-    // .then(function(data) {
-    //   console.log(data);
-    // })
-    // .catch(function(err) {
-    //   console.error('Error occurred: ' + err); 
-    // });
-
-    spotify.search({ type: 'track', query: argTwo }, function(err, data) {
-      if (err) {
-        return console.log('Error occurred: ' + err);
-      }
-     console.log(data)
-    //console.log(JSON.stringify(data)); 
-    });
-  }else if(argOne === "movie-this"){
+    // console.log(JSON.stringify(tweets, null, 2));
+    for(var i=0; i<tweets.length; i++){
+      console.log(tweets[i].created_at)
+      console.log(tweets[i].text)
+    }
     
-    var params = {
-      api_key:omdbApiKey,
-      query:'sow'
+  });
+  } 
+
+if(argOne === "spotify-this-song"){
+  var spotify = new Spotify(keys.spotify);
+  spotify.search({ type: 'track', query: argTwo }, function(err, data) {
+    if (err) {
+      return console.log('Error occurred: ' + err);
     }
-    omdb.search(params, function(err, movies) {
-    if(err) {
-        return console.error(err);
+  // console.log(data.tracks.items);
+    for(var i=0; i<data.tracks.items.length; i++){
+      console.log(data.tracks.items[i].album.name)
     }
- 
-    if(movies.length < 1) {
-        return console.log('No movies were found!');
-    }
- 
-    movies.forEach(function(movie) {
-        console.log('%s (%d)', movie.title, movie.year);
-    });
-    });
-  }
+  });
+}
+
+  
+if(argOne === "movie-this"){
+  
+  var omdbKey = keys.omdb;
+  request('http://www.omdbapi.com/?apikey=' + omdbKey + '&t=' + argTwo, 
+    function (error, response, body) {
+    console.log('error:', error); // Print the error if one occurred
+   // console.log('statusCode:', response && response.statusCode);
+    console.log('body:', JSON.stringify(body)); // Print the HTML for the Google homepage.
+  });
+}
 
 
  
