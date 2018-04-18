@@ -18,6 +18,8 @@
   },
   "homepage": "https://github.com/TAYLOR-YAO/liri-node-app#readme",
   "dependencies": {
+    "dotenv": "^5.0.1",
+    "node-spotify-api": "^1.0.7",
     "omdb": "^0.8.0",
     "require": "^2.4.20",
     "spotify": "^0.3.0",
