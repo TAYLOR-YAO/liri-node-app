@@ -18,11 +18,24 @@ function liri(argOne, argTwo){
         if(error) return console.log(error);
         // console.log(JSON.stringify(tweets, null, 2));
         for(var i=0; i<tweets.length; i++){
-          console.log("Tweets date: " +" "+ tweets[i].created_at)
-          console.log("Tweets: " +" "+ tweets[i].text)
-        }
-        
+          
+          var tweetDate = "\nTweets date: " +" "+ tweets[i].created_at;
+          var Tweet = "\nTweets: " +" "+ tweets[i].text +"\n\n-------------------------------------------------------------------------------";
+          console.log(tweetDate);
+          console.log(Tweet);
+          var tweetInfos = tweetDate + Tweet;
+            fs.appendFile('./log.txt',tweetInfos  + "\n ---------------------------------------------------------------------------",encoding='utf8', (err) => {
+          
+            })
+          }
+          console.log("\n \n*********************************************************************************")
+          
+          fs.appendFile('./log.txt',"\n \n  *********************************************************************************************************************",encoding='utf8', (err) => {
+          
+          })
+
       });
+      
       } 
 
         // ------------------------------SPOTIFY API------------------------------------------
@@ -31,33 +44,59 @@ function liri(argOne, argTwo){
     if(argOne === "spotify-this-song" && !argTwo){
       var spotify = new Spotify(keys.spotify);
       var defaultargTwo = "The Sign";
-      spotify.search({ type: 'track', query: defaultargTwo}, function(err, data) {
+      spotify.search({ type: 'track', query: defaultargTwo,limit: 1}, function(err, data) {
         if (err) {
           return console.log('Error occurred: ' + err);
         }
       // console.log(data);
       // console.log(data.tracks.items);
-        for(var i=0; i<data.tracks.items.length; i++){
-          console.log(" Artist:", data.tracks.items[0].artists[0].name);
-          console.log(" Son name:", data.tracks.items[0].name);
-          console.log(" Son Link:", data.tracks.items[0].external_urls.spotify);
-          console.log(" Album:", data.tracks.items[0].album.name);
+      for(var i=0; i<data.tracks.items.length; i++){
+        var artists = " Artist:"+ data.tracks.items[0].artists[0].name;
+        var songName = " Song name:" + data.tracks.items[0].name;
+        var songLink = " Song Link:"+ data.tracks.items[0].external_urls.spotify;
+        var Album = " Album:"+ data.tracks.items[0].album.name;
+        console.log(artists);
+        console.log(songName);
+        console.log(songLink);
+        console.log(Album);
+        console.log("\n \n*********************************************************************************")
+
+        var songInfos=[];
+        songInfos.push(artists,songName,songLink,Album, "\n \n*********************************************************************************");
+        for(i=0; i<songInfos.length; i++){
+          fs.appendFile('./log.txt',"\n"+songInfos[i],encoding='utf8', (err) => {
           
+          })
         }
+        
+      }
       });
     }else if (argOne === "spotify-this-song"){
       var spotify = new Spotify(keys.spotify);
-        spotify.search({ type: 'track', query: argTwo}, function(err, data) {
+        spotify.search({ type: 'track', query: argTwo,limit: 1}, function(err, data) {
           if (err) {
             return console.log('Error occurred: ' + err);
           }
         // console.log(data);
         // console.log(data.tracks.items);
         for(var i=0; i<data.tracks.items.length; i++){
-          console.log(" Artist:", data.tracks.items[0].artists[0].name);
-          console.log(" Son name:", data.tracks.items[0].name);
-          console.log(" Son Link:", data.tracks.items[0].external_urls.spotify);
-          console.log(" Album:", data.tracks.items[0].album.name);
+          var artists = " Artist:"+ data.tracks.items[0].artists[0].name;
+          var songName = " Song name:" + data.tracks.items[0].name;
+          var songLink = " Song Link:"+ data.tracks.items[0].external_urls.spotify;
+          var Album = " Album:"+ data.tracks.items[0].album.name;
+          console.log(artists);
+          console.log(songName);
+          console.log(songLink);
+          console.log(Album);
+          console.log("\n \n*********************************************************************************")
+
+          var songInfos=[];
+          songInfos.push(artists,songName,songLink,Album,"\n \n*********************************************************************************" );
+          for(i=0; i<songInfos.length; i++){
+            fs.appendFile('./log.txt',"\n"+songInfos[i],encoding='utf8', (err) => {
+            
+            })
+          }
           
         }
       });
@@ -72,16 +111,33 @@ function liri(argOne, argTwo){
           function (error, response, body) {
             const data = JSON.parse(body);
             console.log('error:', error); 
-          // console.log('statusCode:', response && response.statusCode);
-            console.log(data);
-            console.log('Title:',data.Title);
-            console.log('Year:',data.Year);
-            console.log('IMDB rating:',data.imdbRating);
-            console.log('Rotten tomatoes rating:', data.Ratings[1].Value);
-            console.log('Country:',data.Country);
-            console.log('Language:',data.Language);
-            console.log('Plot:',data.Plot);
-            console.log('Actors:',data.Actors);
+            // console.log(data);
+            var title = 'Title:' + data.Title;
+          var year = 'Year:'+ data.Year;
+          var ImdbRating = 'IMDB rating:' + data.imdbRating;
+          var rotten = 'Rotten tomatoes rating:'+ data.Ratings[1].Value;
+          var country = 'Country:'+data.Country;
+          var language = 'Language:'+ data.Language;
+          var plot = 'Plot:' + data.Plot;
+          var actors = 'Actors:' + data.Actors;
+          console.log(title);
+          console.log(year);
+          console.log(ImdbRating);
+          console.log(rotten);
+          console.log(country);
+          console.log(language),
+          console.log(plot);
+          console.log(actors);
+          console.log("\n \n*********************************************************************************")
+          var moviInfos =[]
+          moviInfos.push(title, year,ImdbRating, rotten,country,language,plot,actors, "\n \n*********************************************************************************")
+
+          for(var i=0; i<moviInfos.length; i++){
+            var displayInfos = "\n"+moviInfos[i];
+            fs.appendFile('./log.txt',displayInfos,encoding='utf8', (err) => {
+            
+            })
+          }
           
         });
     }else if(argOne === "movie-this"){
@@ -92,21 +148,35 @@ function liri(argOne, argTwo){
           if(error){
             console.log('error:', error);
           }
-          // console.log('statusCode:', response && response.statusCode);
           //console.log('body:', data); 
-          var moviInfos = (
-          console.log('Title:',data.Title),
-          console.log('Year:',data.Year),
-          console.log('IMDB rating:',data.imdbRating),
-          console.log('Rotten tomatoes rating:',data.Ratings[1].Value),
-          console.log('Country:',data.Country),
-          console.log('Language:',data.Language),
-          console.log('Plot:',data.Plot),
-          console.log('Actors:',data.Actors));
+          var title = 'Title:' + data.Title;
+          var year = 'Year:'+ data.Year;
+          var ImdbRating = 'IMDB rating:' + data.imdbRating;
+          var rotten = 'Rotten tomatoes rating:'+ data.Ratings[1].Value;
+          var country = 'Country:'+data.Country;
+          var language = 'Language:'+ data.Language;
+          var plot = 'Plot:' + data.Plot;
+          var actors = 'Actors:' + data.Actors;
+          console.log(title);
+          console.log(year);
+          console.log(ImdbRating);
+          console.log(rotten);
+          console.log(country);
+          console.log(language),
+          console.log(plot);
+          console.log(actors);
+          console.log("\n \n*********************************************************************************")
 
-          // fs.appendFile('./log.txt',liri(moviInfos),encoding='utf8', (err) => {
+          var moviInfos =[]
+          moviInfos.push(title, year,ImdbRating, rotten,country,language,plot,actors, "\n \n*********************************************************************************")
+
+          for(var i=0; i<moviInfos.length; i++){
+            var displayInfos = "\n"+moviInfos[i];
+            fs.appendFile('./log.txt',displayInfos,encoding='utf8', (err) => {
             
-          // })
+            })
+          }
+          
             
       });
     }
@@ -120,14 +190,16 @@ function liri(argOne, argTwo){
           console.log("Eror: " + error);
         }
         console.log(data);
+        console.log("\n \n*********************************************************************************")
+        fs.appendFile('./log.txt',"\n"+data + "\n \n  ********************************************************************************",encoding='utf8', (err) => {
+                
+        });
     // ---------------------calling the SPOTIFY-API---------------------------------------
         liri("spotify-this-song", "I Want it That Way");
 
       })
     }
-
-     // fs.appendFile('./log.txt',liri(moviInfos),encoding='utf8', (err) => {
-            
-    // })
+    
+  
 }
-var text = liri(liriCommande, optionCommande);
+liri(liriCommande, optionCommande);
